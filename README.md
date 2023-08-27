@@ -1,5 +1,5 @@
 # Career
-Career is a web platform built using C# 11 and ASP.NET Core 7 that aims to provide a comprehensive job-seeking and recruitment solution, similar to popular job platform kariyer.net. 
+Career is a web platform built using C# 11 and ASP.NET Core 7 that aims to provide a comprehensive job-seeking and recruitment solution, similar to popular job platform kariyer.net.<br/>
 It is written only for educational purposes and not suitable for any kind of organization in its current state.
 
 > ⚠️ Current version supports only one Company account!
