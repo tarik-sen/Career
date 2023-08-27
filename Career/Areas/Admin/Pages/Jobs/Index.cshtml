@@ -1,0 +1,101 @@
+﻿@page
+@model Career.Areas.Admin.Pages.Jobs.IndexModel
+@{
+    ViewData["Title"] = "Jobs";
+}
+
+<div class="container bg-white p-3">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-xl-4 mb-3 px-1 g-3">
+        <div class="col">
+            <div id="career-gender-chart" class="chart-container">
+                <div class="chart-placeholder">
+                    <div class="chart-loader"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div id="career-country-chart" class="chart-container">
+                <div class="chart-placeholder">
+                    <div class="chart-loader"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div id="career-study-field-chart" class="chart-container">
+                <div class="chart-placeholder">
+                    <div class="chart-loader"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div id="career-experience-chart" class="chart-container">
+                <div class="chart-placeholder">
+                    <div class="chart-loader"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div id="job-container" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 row-cols-xxl-5 g-4 mb-2">
+        @if (Model.Jobs == null)
+        {
+            <p>Could not found any job, add some - Change Me! -</p>
+        }
+        else
+        {
+            @foreach (var job in Model.Jobs)
+            {
+                <div class="col solution_cards_box">
+                    <div class="solution_card d-flex flex-column h-100">
+                        <div class="hover_color_bubble"></div>
+                        <div class="solu_title">
+                            <h3>@job.Title</h3>
+                        </div>
+                        <div class="solu_title">
+                            <h6>@job.CompanyName</h6>
+                        </div>
+                        <div class="solu_description flex-grow-1">
+                            <p>@(job.Description.Length <= 128 ? job.Description : job.Description.Substring(0, 128) + "...")</p>
+                        </div>
+                        <div class="solu_description">
+                            <a asp-area="Admin" asp-page="/Jobs/Job" asp-route-id="@job.JobId" class="btn read_more_btn">Check out!</a>
+                        </div>
+                    </div>
+
+                </div>
+            }
+        }
+
+    </div>
+</div>
+
+
+@section Scripts{
+    <script type="text/javascript">
+        let GenderData, CountryData, StudyFieldData, ExperienceData;
+
+        google.charts.load('current', { packages: ['corechart'] });
+        google.charts.setOnLoadCallback(LoadData);
+        $(window).resize(drawCharts);
+
+        function LoadData() {
+            GetChartDataFrom("Jobs/Index?handler=GenderChartData").then(data => { GenderData = data }).catch(error => { console.error(error); });
+            GetChartDataFrom("Jobs/Index?handler=CountryChartData").then(data => { CountryData = data }).catch(error => { console.error(error); });
+            GetChartDataFrom("Jobs/Index?handler=StudyFieldChartData").then(data => { StudyFieldData = data }).catch(error => { console.error(error); });
+            GetChartDataFrom("Jobs/Index?handler=ExperienceChartData").then(data => { ExperienceData = data }).catch(error => { console.error(error); });
+
+            setTimeout(function () { $(".chart-placeholder").hide(); drawCharts(); }, 2000);
+        }
+
+        function drawCharts() {
+            DrawPieChart("Gender Distribution", "career-gender-chart", GenderData);
+            DrawPieChart("Country Distribution", "career-country-chart", CountryData);
+            DrawPieChart("Field Distribution", "career-study-field-chart", StudyFieldData);
+            DrawPieChart("Experience Distribution", "career-experience-chart", ExperienceData);
+        }
+
+    </script>
+}

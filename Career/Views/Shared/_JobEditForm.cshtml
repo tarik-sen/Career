@@ -1,0 +1,110 @@
+﻿@model Career.Models.FormModels.JobsFormModel
+@{
+}
+
+<form id="job-edit-form" class="d-flex flex-column flex-grow-1" method="post">
+    <input type="hidden" asp-for="Job.JobId"/>
+
+    <div class="row mb-3">
+        <!-- Title Form -->
+        <div class="col-lg-6">
+            <div class="form-floating">
+                <input asp-for="Job.Title" class="form-control" aria-required="true" placeholder="Title: " />
+                <label asp-for="Job.Title" class="form-label">Title</label>
+                <span asp-validation-for="Job.Title" class="text-danger"></span>
+            </div>
+        </div>
+
+        <!-- Company Form -->
+        <div class="col-lg-6">
+            <div class="form-floating">
+                <input asp-for="Job.CompanyName" class="form-control" aria-required="true" placeholder="Company: " />
+                <label asp-for="Job.CompanyName" class="form-label">Company</label>
+                <span asp-validation-for="Job.CompanyName" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <!-- Position Form -->
+        <div class="col-lg-6">
+            <div class="form-floating">
+                <input asp-for="Job.Position" class="form-control" aria-required="true" placeholder="Position: " />
+                <label asp-for="Job.Position" class="form-label">Position</label>
+                <span asp-validation-for="Job.Position" class="text-danger"></span>
+            </div>
+        </div>
+
+        <!-- Work Type Form -->
+        <div class="col-lg-6">
+            <div class="form-floating">
+                <select class="form-select" asp-for="Job.WorkType" asp-items="Model.WorkType"> </select>
+                <label for="Job.WorkType">Work Type</label>
+                <span asp-validation-for="Job.WorkType" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+
+        <!-- Sector Form -->
+        <div class="col-lg-3">
+            <div class="form-floating">
+                <select class="form-select" asp-for="Job.SectorId" asp-items="Model.SectorDataset">
+                    <option value="">--</option>
+                </select>
+                <label for="Job.SectorId">Sector</label>
+                <span asp-validation-for="Job.SectorId" class="text-danger"></span>
+            </div>
+        </div>
+
+        <!-- Industry Form -->
+        <div class="col-lg-3">
+            <div class="form-floating">
+                <select class="form-select" asp-for="Job.IndustryId" asp-items="Model.IndustriesDataset">
+                    <option value="">--</option>
+                </select>
+                <label for="Job.IndustryId">Industry</label>
+                <span asp-validation-for="Job.IndustryId" class="text-danger"></span>
+            </div>
+        </div>
+
+        <!-- Country Form -->
+        <div class="col-lg-3">
+            <div class="form-floating">
+                <select id="country-select" class="form-select" asp-for="Job.CountryId" asp-items="Model.CountryDataset">
+                    <option value="">--</option>
+                </select>
+                <label for="Job.CountryId">Country</label>
+                <span asp-validation-for="Job.CountryId" class="text-danger"></span>
+            </div>
+        </div>
+
+        <!-- City Form -->
+        <div class="col-lg-3">
+            <div class="form-floating">
+                <select id="city-select" class="form-select" asp-for="Job.CityId" asp-items="Model.CityDataset">
+                    <option value="">--</option>
+                </select>
+                <label for="Job.CityId">City</label>
+                <span asp-validation-for="Job.CityId" class="text-danger"></span>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="form-group mb-3">
+        <textarea class="form-control" asp-for="Job.Summary" placeholder="Job Summary:" rows="5"></textarea>
+        <span asp-validation-for="Job.Summary" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <textarea class="form-control" asp-for="Job.Description" placeholder="Job Description:" rows="10"></textarea>
+        <span asp-validation-for="Job.Description" class="text-danger"></span>
+    </div>
+
+    <div class="d-flex justify-content-end">
+        <button class="btn btn-primary-dark rounded-1" type="submit"> Save </button>
+    </div>
+
+</form>

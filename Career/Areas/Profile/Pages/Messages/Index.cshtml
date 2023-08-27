@@ -1,0 +1,48 @@
+﻿@page
+@model Career.Areas.Profile.Pages.Messages.IndexModel
+@{
+    ViewData["Title"] = "Messages";
+}
+
+<div class="mt-1 pb-2 mb-2 border-bottom border-1">
+    <p class="display-5 text-center">Welcome to Notifications Page</p>
+    <p class="lead fs-5">Check out your notifications to not miss any job opportunity!</p>
+</div>
+
+<div id="messages-container">
+    @foreach (var message in Model.Messages)
+    {
+        <div class="alert alert-success alert-dismissible" role="alert">
+            <button id="msg-@message.MessageId" type="button" class="btn-close msg-close-btn" data-bs-dismiss="alert" aria-label="Close"></button>
+            @message.Content
+        </div>
+    }
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".msg-close-btn").click(function () {
+                let msgId = $(this).attr("id").split("-").pop();
+                let alert = $(this);
+
+                $.ajax({
+                    url: "Messages/Index?Handler=DeleteMsg",
+                    method: "POST",
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("XSRF-TOKEN", $('input:hidden[name="__RequestVerificationToken"]').val());
+                    },
+                    data: {
+                        msgId: msgId
+                    },
+                    success: function (data) {
+                        alert.remove();
+                    },
+                    error: function (error) {
+                        console.error(error);
+                    }
+                });
+            });
+        });
+    </script>
+}

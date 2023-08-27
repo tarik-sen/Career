@@ -1,0 +1,128 @@
+﻿@page
+@model Career.Areas.Profile.Pages.CV.Manage.ProjectsModel
+@{
+    ViewData["Title"] = "Projects";
+    ViewData["ActivePage"] = ProfileSidebarPages.Projects;
+    ViewData["isReadonly"] = false;
+}
+
+<partial name="_ProjectListForm" model="Model" />
+
+
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $(document).on("mouseenter", ".project-container", function () {
+                if ($(this).find("[disabled]").length > 0)
+                    $(this).find(".edit-project-btn").removeAttr("hidden");
+            });
+
+            $(document).on("mouseleave", ".project-container", function () {
+                $(this).find(".edit-project-btn").attr("hidden", "hidden");
+            });
+
+            $(document).on("click", ".edit-project-btn", function () {
+                var $projectContainer = $(this).closest(".project-container");
+                var $disabled = $projectContainer.find(".disableOnReadOnly");
+                var $hidden = $projectContainer.find(".hideOnReadOnly");
+
+                $hidden.removeAttr("hidden");
+                $(this).attr("hidden", "hidden");
+
+                $disabled.removeAttr("disabled");
+                $disabled.removeClass("disabled-entry");
+                $disabled.addClass("active-entry");
+            });
+
+            $(document).on("submit", ".project-form", function (e) {
+                e.preventDefault();
+
+                var $projectContainer = $(this).closest(".project-container");
+                var prevProjectId = $projectContainer.attr("id").split("-").pop();
+
+                $.ajax({
+                    url: "Projects",
+                    method: "POST",
+                    data: $(this).serialize(),
+                    success: function (data) {
+                        var $data = $(data);
+                        var curProjectId = $data.attr("id").split("-").pop();
+
+                        $projectContainer.html(data);
+
+                        if (prevProjectId !== curProjectId)
+                            $projectContainer.attr("id", "project-form-" + curProjectId);
+
+                        if ($data.find(".field-validation-error").length > 0)
+                            $projectContainer.find(".edit-project-btn").click();
+                    },
+                    error: function (error) {
+                        console.error(error);
+                    }
+                });
+            });
+
+            $(document).on("click", ".project-deletion-btn", function () {
+                var $projectContainer = $(this).closest(".project-container");
+
+                if ($projectContainer.attr("id") === "project-form-0") {
+                    $projectContainer.remove();
+                    return;
+                }
+
+                $.ajax({
+                    url: "Projects?handler=DeleteProject",
+                    method: "POST",
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("XSRF-TOKEN", $('input:hidden[name="__RequestVerificationToken"]').val());
+                    },
+                    data: { projectId: $projectContainer.attr("id").split("-").pop() },
+                    success: function () {
+                        $projectContainer.remove();
+                    },
+                    error: function (data) {
+                        console.error(error);
+                    }
+                });
+            });
+
+            $(document).on("click", ".project-cancellation-btn", function () {
+                var $projectContainer = $(this).closest(".project-container");
+
+                if ($projectContainer.attr("id") === "project-form-0") {
+                    $projectContainer.remove();
+                    return;
+                }
+
+                $.ajax({
+                    url: "Projects?handler=ProjectWithId",
+                    method: "GET",
+                    data: { projectId: $projectContainer.attr("id").split("-").pop() },
+                    success: function (data) {
+                        $projectContainer.html(data);
+                    },
+                    error: function (error) {
+                        console.error(error);
+                    }
+                });
+            });
+
+            $("#new-project-btn").click(function () {
+                $(".project-cancellation-btn:not([hidden])").click();
+
+                $.ajax({
+                    url: "Projects?handler=NewProject",
+                    method: "GET",
+                    success: function (data) {
+                        $("#projects").prepend(`<div id="project-form-0" class="project-container p-3 mb-3 border rounded-3">${data}</div>`);
+                        $("#project-form-0").find(".edit-project-btn").click();
+                    },
+                    error: function (error) {
+                        console.error(error);
+                    }
+                });
+            });
+        });
+
+    </script>
+}

@@ -1,0 +1,57 @@
+﻿@using Career.Authorization
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@{
+    var user = await UserManager.GetUserAsync(User);
+}
+
+@if (SignInManager.IsSignedIn(User))
+{
+    if (await UserManager.IsInRoleAsync(user!, Constants.UserRole))
+    {
+        <div class="d-flex justify-content-end align-items-center">
+            <a class="d-flex align-items-center justify-content-center p-3" asp-area="Profile" asp-page="/Messages/Index">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="var(--primary-dark)" class="" viewBox="0 0 16 16">
+                    <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555ZM0 4.697v7.104l5.803-3.558L0 4.697ZM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586l-1.239-.757Zm3.436-.586L16 11.801V4.697l-5.803 3.546Z" />
+                </svg>
+            </a>
+            <div class="dropdown">
+                <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="var(--primary-dark)" class="me-3" viewBox="0 0 16 16">
+                        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                        <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
+                    </svg>
+                    <span class="">@User.Identity?.Name</span>
+                </button>
+                <ul class="dropdown-menu w-100">
+                    <li><a class="dropdown-item" asp-area="Profile" asp-page="/CV/Manage/Index">Profile</a></li>
+                    <li><a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index">Account Settings</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                        <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                            <button type="submit" class="nav-link btn btn-link text-dark w-100 text-start" style="padding: 4px 16px;">Logout</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    }
+    else if (await UserManager.IsInRoleAsync(user, Constants.AdministratorRole))
+    {
+        <ul class="nav col-12 col-md-auto ms-md-auto mb-2 mb-md-0 d-flex align-items-center justify-content-center">
+            <li><a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index">@user.UserName</a></li>
+            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                <button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
+            </form>
+        </ul>
+    }
+}
+else
+{
+    <ul class="nav col-12 col-md-auto ms-md-auto mb-2 mb-md-0 d-flex align-items-center justify-content-center">
+        <li><a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a></li>
+        <li><a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a></li>
+    </ul>
+
+}

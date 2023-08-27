@@ -1,0 +1,146 @@
+﻿@page
+@model Career.Areas.Profile.Pages.CV.Manage.ExperiencesModel
+@{
+    ViewData["Title"] = "Experiences";
+    ViewData["ActivePage"] = ProfileSidebarPages.Experiences;
+    ViewData["isReadonly"] = false;
+}
+
+<partial name="_ExperienceListForm" model="Model" />
+
+
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $(document).on("mouseenter", ".experience-container", function () {
+                if ($(this).find("[disabled]").length > 0)
+                    $(this).find(".edit-experience-btn").removeAttr("hidden");
+            });
+
+            $(document).on("mouseleave", ".experience-container", function () {
+                $(this).find(".edit-experience-btn").attr("hidden", "hidden");
+            });
+
+            $(document).on("click", ".edit-experience-btn", function() {
+                var experienceContainer = $(this).parents(".experience-container");
+                var disabled = experienceContainer.find(".disableOnReadOnly");
+
+                experienceContainer.find(".hideOnReadOnly").removeAttr("hidden");
+                $(this).attr("hidden", "hidden");
+
+                disabled.removeAttr("disabled");
+                disabled.removeClass("disabled-entry");
+                disabled.addClass("active-entry");
+            });
+
+            $(document).on("click", ".experience-cancellation-btn", function() {
+                // Visual configuration
+                var experienceContainer = $(this).parents(".experience-container");
+
+                if (experienceContainer.attr("id") === "experience-form-0") { // New experience container cancellation
+                    experienceContainer.remove();
+                    return;
+                }
+                
+                // Existing experience container cancellation
+                
+                var disabled = experienceContainer.find(".disableOnReadOnly");
+                experienceContainer.find(".hideOnReadOnly").attr("hidden", "hidden");
+
+                disabled.attr("disabled", "disabled");
+                disabled.removeClass("active-entry");
+                disabled.addClass("disabled-entry");
+
+                // Data refresh
+                $.ajax({
+                    url: "Experiences?handler=NthExperience",
+                    method: "GET",
+                    data: { experienceId: experienceContainer.attr("id").split("-").pop() },
+
+                    success: function (data) {
+                        // console.log(data);
+                        experienceContainer.html(data);
+                    },
+                    error: function (error) {
+                        console.error(error);
+                    }
+
+                });
+            });
+
+            $(document).on("click", ".experience-deletion-btn", function() {
+                var experienceContainer = $(this).parents(".experience-container");
+
+                if (experienceContainer.attr("id") === "experience-form-0") {
+                    experienceContainer.remove();
+                    return;
+                }
+
+                $.ajax({
+                    url: "Experiences?handler=DeleteExperience",
+                    method: "POST",
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("XSRF-TOKEN", $('input:hidden[name="__RequestVerificationToken"]').val());
+                    },
+                    data: { experienceId: experienceContainer.attr("id").split("-").pop() },
+                    success: function(data) {
+                        experienceContainer.remove();
+                    },
+                    error: function (error) {
+                        console.error(error);
+                    }
+                });
+            });
+
+            $(document).on("submit", ".experience-form", function (e) {
+                e.preventDefault();
+
+                var $experienceContainer = $(this).closest(".experience-container");
+                var experiencePrevId = $experienceContainer.attr("id").split("-").pop();
+
+                $.ajax({
+                    url: "Experiences",
+                    method: "POST",
+                    data: $(this).serialize(),
+                    success: function (data) {
+                        var $data = $(data);
+                        var experienceCurId = $data.attr("id").split("-").pop();
+
+                        $experienceContainer.html(data);
+
+                        if (experiencePrevId !== experienceCurId)
+                            $experienceContainer.attr("id", "experience-form" + experienceCurId);
+
+                        if ($data.find(".field-validation-error").length > 0) 
+                            $experienceContainer.find(".edit-experience-btn").click();
+                        
+                        
+                    },
+                    error: function (error) {
+                        console.error(error);
+                    }
+                });
+            });
+
+            $("#new-experience-btn").click(function() {
+                $(".experience-cancellation-btn:not([hidden]").click();
+
+                $.ajax({
+                    url: "Experiences?handler=NewExperience",
+                    method: "GET",
+                    success: function (data) {
+                        $("#experiences").prepend(`<div id="experience-form-0" class="experience-container p-3 mb-3 border rounded-3">${data}</div>`);
+                        $("#experience-form-0").find(".edit-experience-btn").click();
+                    },
+                    error: function (error) {
+                        console.error(error);
+                    }
+
+                });
+                
+            });
+
+            
+        });
+    </script>
+}

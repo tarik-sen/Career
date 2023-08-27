@@ -1,0 +1,24 @@
+﻿@page
+@model Career.Areas.Admin.Pages.Jobs.Manage.UpdateModel
+@{
+    ViewData["Title"] = "Update Job";
+    ViewData["isReadonly"] = false;
+}
+
+<div class="mt-1 pb-2 mb-4 border-bottom border-1">
+    <p class="display-5 text-center p-0 m-0">Update Your Job</p>
+</div>
+
+<partial name="_JobEditForm" model="Model.JobForm" />
+
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            let cityValue = $("#city-select").val();
+
+            GetCitiesOf("#country-select", "#city-select", cityValue);
+
+            $("#country-select").change(function () { GetCitiesOf("#country-select", "#city-select"); });
+        });
+    </script>
+}

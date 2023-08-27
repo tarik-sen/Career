@@ -1,0 +1,23 @@
+﻿@using Career.Authorization
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@{
+    var user = await UserManager.GetUserAsync(User);
+}
+
+<ul class="nav col-12 col-md-auto me-md-auto mb-2 mb-md-0 ms-3 d-flex align-items-center justify-content-center">
+    @if (!SignInManager.IsSignedIn(User) || await UserManager.IsInRoleAsync(user!, Constants.UserRole))
+    {
+        <li><a class="nav-link link-dark" asp-controller="Home" asp-action="Index">Career</a></li>
+        <li><a class="nav-link link-dark" asp-controller="Jobs" asp-action="Index">Job Openings</a></li>
+        <li><a class="nav-link link-dark" asp-controller="Home" asp-action="About">About us</a></li>
+    } 
+    else
+    {
+        <li><a class="nav-link link-dark" asp-area="Admin" asp-page="/Jobs/Index">Hire!</a></li>
+        <li><a class="nav-link link-dark" asp-area="Admin" asp-page="/Jobs/Manage/Index">Jobs</a></li>
+        <li><a class="nav-link link-dark" asp-controller="Home" asp-action="About">About us</a></li>
+    }
+
+</ul>

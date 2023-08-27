@@ -1,0 +1,53 @@
+﻿@page
+@model Career.Areas.Admin.Pages.Jobs.ApplicantModel
+@{
+    ViewData["Title"] = "Profile";
+    ViewData["isReadonly"] = true;
+}
+
+<div id="applicant-container-@(Model.UserJobApplication.AppliedJobId)" class="container applicant-container bg-white p-3">
+    <div class="card-header d-flex align-items-center justify-content-between px-2">
+        <h5>Application Date: @Model.UserJobApplication.ApplicationDate.ToString("yyyy-MM-dd")</h5>
+
+        <button type="button" id="notify-btn" class="btn btn-primary-dark rounded-1">Notify</button>
+    </div>
+
+    <div class="row gy-3 d-flex flex-column flex-grow-1 p-3">
+        @if (Model.UserJobApplication.CoverLetter != null)
+        {
+            <div id="card-cover-leter" class="card card-information">
+                <div class="card-header" >
+                    <span class="card-title-information">Cover Letter</span>
+                </div>
+                <div class="card-body">
+                    <p class="card-cover-letter">@Model.UserJobApplication.CoverLetter</p>
+                </div>
+            </div>
+        }
+
+        @if (Model.UserData.ContactForm != null) { <partial name="_ContactForm" model="Model.UserData.ContactForm"/> }
+
+        @if (Model.UserData.PersonalForm != null) { <partial name="_PersonalForm" model="Model.UserData.PersonalForm"/> }
+
+        @if (Model.UserData.ExperiencesForm != null) { <partial name="_ExperienceListForm" model="Model.UserData.ExperiencesForm"/> }
+
+        @if (Model.UserData.EducationsForm != null) { <partial name="_EducationListForm" model="Model.UserData.EducationsForm"/> }
+
+        @if (Model.UserData.ProjectsForm != null) { <partial name="_ProjectListForm" model="Model.UserData.ProjectsForm"/> }
+
+        @if (Model.UserData.SkillList != null) { <partial name="_SkillListForm" model="Model.UserData.SkillList"/> }
+
+    </div>
+
+</div>
+
+
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#notify-btn").click(function() {
+                NotifyApplicant($(".applicant-container").attr("id").split("-").pop(), ".applicant-container");
+            });
+        });
+    </script>
+}

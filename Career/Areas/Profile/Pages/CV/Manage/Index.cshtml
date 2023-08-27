@@ -1,0 +1,19 @@
+﻿@page
+@model Career.Areas.Profile.Pages.CV.Manage.IndexModel
+@{
+    ViewData["Title"] = "Profile";
+    ViewData["ActivePage"] = ProfileSidebarPages.Overview;
+    ViewData["isReadonly"] = true;
+}
+
+@if (Model.ContactForm != null) { <partial name="_ContactForm" model="Model.ContactForm"/> }
+
+@if (Model.PersonalForm != null) { <partial name="_PersonalForm" model="Model.PersonalForm"/> }
+
+@if (Model.ExperiencesForm != null) { <partial name="_ExperienceListForm" model="Model.ExperiencesForm"/> }
+
+@if (Model.EducationsForm != null) { <partial name="_EducationListForm" model="Model.EducationsForm"/> }
+
+@if (Model.ProjectsForm != null) { <partial name="_ProjectListForm" model="Model.ProjectsForm"/> }
+
+@if (Model.SkillList != null) { <partial name="_SkillListForm" model="Model.SkillList"/> }

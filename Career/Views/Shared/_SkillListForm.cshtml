@@ -1,0 +1,26 @@
+﻿@model List<String>
+@{
+}
+
+<div class="card card-information">
+    <div class="card-header d-flex align-items-center justify-content-between">
+        <span class="card-title-information">Skills</span>
+
+        @if (ViewData["Area"]?.ToString() == "Profile")
+        {
+            <a class="btn btn-page-link border rounded-3" asp-page="./Skills">
+                <svg class="bi bi-pencil-square" style="margin: 0 0.125rem 0.125rem 0;" width="16" height="16"><use xlink:href="#pencil-square" /></svg>
+                Edit
+            </a>
+        }
+
+    </div>
+    <div id="skills" class="card-body">
+        <div class="d-flex flex-wrap">
+            @foreach (var skill in Model)
+            {
+                <button class="btn btn-outline-secondary d-flex align-items-center rounded-3 me-2 mb-2" disabled>@(skill)</button>
+            }
+        </div>
+    </div>
+</div>

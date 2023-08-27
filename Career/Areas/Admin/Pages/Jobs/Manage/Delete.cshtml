@@ -1,0 +1,17 @@
+﻿@page
+@model Career.Areas.Admin.Pages.Jobs.Manage.DeleteModel
+@{
+    ViewData["Title"] = "Job Delete";
+    ViewData["ActivePage"] = "Delete";
+}
+
+<partial name="_JobDetails" model="Model.JobModel"/>
+
+
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            SetApplicantNumber($(".job-container").attr("id").split("-").pop(), "#applicant-number");
+        });
+    </script>
+}

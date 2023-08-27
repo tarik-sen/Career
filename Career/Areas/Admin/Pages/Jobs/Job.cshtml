@@ -1,0 +1,139 @@
+﻿@page
+@model Career.Areas.Admin.Pages.Jobs.JobModel
+@{
+    ViewData["Title"] = "Job Details";
+}
+
+<div id="job-container-@Model.JobId" class="container job-container d-flex flex-column flex-grow-1 bg-white p-4">
+    <div class="applicant-chart-container mb-3">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-xl-4 mb-3 g-3">
+            <div class="col">
+                <div id="career-gender-chart" class="chart-container">
+                    <div class="chart-placeholder">
+                        <div class="chart-loader"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div id="career-country-chart" class="chart-container">
+                    <div class="chart-placeholder">
+                        <div class="chart-loader"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div id="career-study-field-chart" class="chart-container">
+                    <div class="chart-placeholder">
+                        <div class="chart-loader"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div id="career-experience-chart" class="chart-container">
+                    <div class="chart-placeholder">
+                        <div class="chart-loader"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="applicant-datatable-container my-5">
+        <table class="hover order-column row-border" id="applicant-datatable">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Surname</th>
+                    <th>Application Date</th>
+                    <th>Exp. Salary</th>
+                    <th>Gender</th>
+                    <th>Country</th>
+                    <th>City</th>
+                    <th></th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var data in Model.DataTable)
+                {
+                    <tr>
+                        <td>@data.Name</td>
+                        <td>@data.Surname</td>
+                        <td>@data.ApplicationDate</td>
+                        <td>@data.ExpectedSalary</td>
+                        <td>@data.Gender</td>
+                        <td>@data.Country</td>
+                        <td>@data.City</td>
+                        <td>
+                            <a class="btn btn-filter" type="button" asp-page="/Jobs/Applicant" asp-route-id="@data.AppliedJobId">Details</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="applicant-hire-container mb-3">
+        <form id="notify-all-form" method="post">
+            <div class="form-group my-3">
+                <label class="select2-label">Select Applicants:</label>
+                <select class="form-select" multiple="multiple" id="applicant-select2" asp-items="Model.SelectTwo">
+                </select>
+            </div>
+
+            <button type="submit" id="hire-btn" class="btn btn-primary-dark rounded-1">Hire Applicant(s)</button>
+        </form>
+
+    </div>
+
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+        let GenderData, CountryData, StudyFieldData, ExperienceData;
+
+        google.charts.load('current', { packages: ['corechart'] });
+        google.charts.setOnLoadCallback(LoadData);
+        $(window).resize(drawCharts);
+
+        function LoadData() {
+            let jobId = $(".job-container").attr("id").split("-").pop();
+
+            GetChartDataFrom("Index?handler=GenderChartData&JobId=" + jobId).then(data => { GenderData = data }).catch(error => { console.error(error); });
+            GetChartDataFrom("Index?handler=CountryChartData&JobId=" + jobId).then(data => { CountryData = data }).catch(error => { console.error(error); });
+            GetChartDataFrom("Index?handler=StudyFieldChartData&JobId=" + jobId).then(data => { StudyFieldData = data }).catch(error => { console.error(error); });
+            GetChartDataFrom("Index?handler=ExperienceChartData&JobId=" + jobId).then(data => { ExperienceData = data }).catch(error => { console.error(error); });
+
+            setTimeout(function () { $(".chart-placeholder").hide(); drawCharts(); }, 2000);
+        }
+
+        function drawCharts() {
+            DrawPieChart("Gender Distribution", "career-gender-chart", GenderData);
+            DrawPieChart("Country Distribution", "career-country-chart", CountryData);
+            DrawPieChart("Field Distribution", "career-study-field-chart", StudyFieldData);
+            DrawPieChart("Experience Distribution", "career-experience-chart", ExperienceData);
+        }
+
+        $(document).ready(function () {
+            $("#applicant-datatable").DataTable();
+            $("#applicant-select2").select2();
+
+            document.getElementById("notify-all-form").addEventListener("submit", function (e) {
+                e.preventDefault();
+
+                var selectElement = document.getElementById('applicant-select2');
+                var selectedOptions = Array.from(selectElement.selectedOptions).map(option => option.value);
+
+                for (var appliedJobId of selectedOptions) {
+                    NotifyApplicant(appliedJobId, ".job-container");
+                }
+
+            });
+        });
+    </script>
+}
+

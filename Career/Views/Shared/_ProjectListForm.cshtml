@@ -1,0 +1,37 @@
+﻿@model Career.Areas.Profile.Pages.CV.Manage.ProjectsModel
+@{
+}
+
+<div class="card card-information">
+    <div class="card-header d-flex align-items-center justify-content-between">
+        <span class="card-title-information">Projects</span>
+
+        @if (ViewData["Area"]?.ToString() == "Profile")
+        {
+            @if ((bool)ViewData["isReadonly"]!)
+            {
+                <a class="btn btn-page-link border rounded-3" asp-page="./Projects">
+                    <svg class="bi bi-pencil-square" style="margin: 0 0.125rem 0.125rem 0;" width="16" height="16"><use xlink:href="#pencil-square" /></svg>
+                    Edit
+                </a>
+            }
+            else
+            {
+                <button id="new-project-btn" class="btn border rounded-3">
+                    <svg class="bi bi-plus" style="margin: 0 0.125rem 0.125rem 0;" width="16" height="16"><use xlink:href="#add-icon" /></svg>
+                    Add Project
+                </button>
+            }
+        }
+
+    </div>
+    <div id="projects" class="card-body">
+        @foreach (var project in Model.Projects)
+        {
+            <div id="project-form-@(project.ProjectId)" class="project-container p-3 mb-3 border rounded-3">
+                <partial name="_ProjectForm" model=@(project) />
+
+            </div>
+        }
+    </div>
+</div>

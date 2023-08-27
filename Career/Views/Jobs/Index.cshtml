@@ -1,0 +1,142 @@
+﻿@model Career.Models.FormModels.JobsFilterModel
+@{
+    ViewData["Title"] = "Job Openings";
+}
+
+
+<div class="container-fluid career-secondary">
+    <div class="container mb-3">
+        <h5 class="p-3">@(Model.Jobs!.Count) Job Openings</h5>
+        <div class="row">
+            <div class="col-3 p-3 border border-1 rounded-3" style="background-color: #f6f7fd;">
+                <h5 class="ms-2 mb-3">Filter Options</h5>
+
+                <form asp-controller="Jobs" asp-action="Index" method="GET">
+                    <!-- Job Search Form -->
+                    <div class="form-floating mb-2">
+                        <input asp-for="JSearch" class="form-control" aria-required="true" placeholder="Job: " />
+                        <label asp-for="JSearch" class="form-label">Job</label>
+                    </div>
+
+                    <!-- Position Search Form -->
+                    <div class="form-floating mb-2">
+                        <input asp-for="PSearch" class="form-control" aria-required="true" placeholder="Position: " />
+                        <label asp-for="PSearch" class="form-label">Position</label>
+                    </div>
+
+                    <!-- WorkType Form -->
+                    <div class="form-floating mb-2">
+                        <select class="form-select" asp-for="WorkType" asp-items="Model.WorkTypeList">
+                            <option value="">--</option>
+                        </select>
+                        <label for="WorkType">Work Type</label>
+                    </div>
+
+                    <!-- Sector Form -->
+                    <div class="form-floating mb-2">
+                        <select class="form-select" asp-for="SectorId" asp-items="Model.SectorDataset">
+                            <option value="">--</option>
+                        </select>
+                        <label for="SectorId">Sector</label>
+                    </div>
+
+                    <!-- Industry Form -->
+                    <div class="form-floating mb-2">
+                        <select class="form-select" asp-for="IndustryId" asp-items="Model.IndustryDataset">
+                            <option value="">--</option>
+                        </select>
+                        <label for="IndustryId">Industry</label>
+                    </div>
+
+                    <!-- Country Form -->
+                    <div class="form-floating mb-2">
+                        <select class="form-select" asp-for="CountryId" asp-items="Model.CountryDataset">
+                            <option value="">--</option>
+                        </select>
+                        <label for="CountryId">Country</label>
+                    </div>
+
+                    <!-- City Form -->
+                    <div class="form-floating mb-2">
+                        <select class="form-select" asp-for="CityId" asp-items="@(Model.CityDataset ?? null)">
+                            <option value="">--</option>
+                        </select>
+                        <label for="CityId">City</label>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-12 col-lg-6">
+                            <button id="filter-btn" class="btn btn-filter rounded-1 w-100 mb-3 mb-lg-0" type="submit">Filter</button>
+                        </div>
+                        <div class="col-12 col-lg-6">
+                            <button id="filter-reset-btn" class="btn btn-filter rounded-1 w-100" type="button">Reset</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="col-9">
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xxl-3 g-4 mb-2">
+                    @foreach (var job in Model.Jobs)
+                    {
+                        <div class="col solution_cards_box">
+                            <div class="solution_card d-flex flex-column h-100">
+                                <div class="hover_color_bubble"></div>
+                                <div class="solu_title">
+                                    <h3>@job.Title</h3>
+                                </div>
+                                <div class="solu_title">
+                                    <h6>@job.CompanyName</h6>
+                                </div>
+                                <div class="solu_description flex-grow-1">
+                                    <p>@(job.Description.Length <= 128 ? job.Description : job.Description.Substring(0, 128) + "...")</p>
+                                </div>
+                                <div class="solu_description">
+                                    <a asp-controller="Jobs" asp-action="Details" asp-route-id="@job.JobId" class="btn read_more_btn">Check out!</a>
+                                </div>
+                            </div>
+
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#filter-reset-btn").click(function() {
+                $(".form-floating input").val("");
+                $(".form-floating select").val("");
+                $("#filter-btn").click();
+            });
+
+            $("#CountryId").change(function() {
+                $.ajax({
+                    url: "/Jobs/CitiesOf",
+                    method: "GET",
+                    data: { countryId: $("#CountryId").val() },
+                    success: function (data) {
+                        var citySelect = $("#CityId");
+
+                        var s = "<option value>--</option>";
+                        data.forEach(function (item) {
+                            s += `<option value=${item.value}>${item.text}</option>`;
+                        });
+
+                        citySelect.html(s);
+
+                    },
+                    error: function (error) {
+                        console.error(error);
+                    }
+
+                });
+            });
+        });
+    </script>
+}

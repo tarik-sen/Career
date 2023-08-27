@@ -1,0 +1,39 @@
+﻿@model Career.Areas.Profile.Pages.CV.Manage.ExperiencesModel
+@{
+}
+
+<div class="card card-information">
+    <div class="card-header d-flex align-items-center justify-content-between">
+        <span class="card-title-information">Experiences</span>
+
+        @if (ViewData["Area"]?.ToString() == "Profile")
+        {
+            @if ((bool)ViewData["isReadonly"]!)
+            {
+                <a class="btn btn-page-link border rounded-3" asp-page="./Experiences">
+                    <svg class="bi bi-pencil-square" style="margin: 0 0.125rem 0.125rem 0;" width="16" height="16"><use xlink:href="#pencil-square" /></svg>
+                    Edit
+                </a>
+            }
+            else
+            {
+                <button id="new-experience-btn" class="btn border rounded-3">
+                    <svg class="bi bi-plus" style="margin: 0 0.125rem 0.125rem 0;" width="16" height="16"><use xlink:href="#add-icon" /></svg>
+                    Add Experience
+                </button>
+            }
+        }
+
+
+
+    </div>
+    <div id="experiences" class="card-body">
+        @foreach (var experienceForm in Model.ExperienceForms)
+        {
+            <div id="experience-form-@(experienceForm.Experience.ExperienceId)" class="experience-container p-3 mb-3 border rounded-3">
+                <partial name="_ExperienceForm" model=@(experienceForm) />
+
+            </div>
+        }
+    </div>
+</div>

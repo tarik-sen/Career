@@ -1,0 +1,12 @@
+﻿@model UserAbilityEntityModel
+@{
+}
+
+<button id="ability-delete-btn-@(Model.AbilityId)" class="btn btn-outline-secondary ability-delete-btn d-flex align-items-center rounded-3 me-2 mb-2">
+    @Model.UserSkill!.Title
+    <span class="badge p-0 ps-1" style="top: 1px;" >
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+            <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+        </svg>
+    </span>
+</button>   

@@ -1,0 +1,9 @@
+﻿@page
+@model Career.Areas.Profile.Pages.CV.Manage.PersonalModel
+@{
+    ViewData["Title"] = "Personal";
+    ViewData["ActivePage"] = ProfileSidebarPages.Personal;
+    ViewData["isReadonly"] = false;
+}
+
+<partial name="_PersonalForm" model="Model"/>

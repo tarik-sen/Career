@@ -1,0 +1,21 @@
+﻿@page
+@model Career.Areas.Profile.Pages.CV.Manage.ContactModel
+@{
+    ViewData["Title"] = "Contact";
+    ViewData["ActivePage"] = ProfileSidebarPages.Contact;
+    ViewData["isReadonly"] = false;
+}
+
+<partial name="_ContactForm" model="Model"/>
+
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function() {
+            let cityValue = $("#city-select").val();
+
+            CityOf("#country-select", "#city-select", cityValue);
+
+            $("#country-select").change(function () { CityOf("#country-select", "#city-select"); });
+        });
+    </script>
+}

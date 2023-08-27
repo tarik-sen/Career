@@ -1,0 +1,111 @@
+﻿@page
+@model Career.Areas.Profile.Pages.CV.Manage.SkillsModel
+@{
+    ViewData["Title"] = "Skills";
+    ViewData["ActivePage"] = ProfileSidebarPages.Skills;
+    ViewData["isReadonly"] = false;
+}
+
+<div class="row flex-grow-1 bg-white border rounded-3 p-3">
+    <div class="col-12 col-lg-6 career-secondary border rounded-3 p-3">
+        <div class="row" style="margin: 0.8125rem 0 0.8125rem 0;">
+            <div class="col-12 col-lg-6 p-0">
+                <input id="search-skill-input" type="text" name="skillsStartWith" class="form-control" aria-required="true" placeholder="Search for a skill: " />
+            </div>
+        </div>
+        <div class="skill-view-container d-flex flex-wrap">
+            
+        </div>
+
+    </div>
+
+    <div class="col-12 col-lg-6 career-secondary border rounded-3 p-3">
+        <h1 class="display-6 mb-3">Your Current Abilities</h1>
+        <div class="ability-delete-container d-flex flex-wrap">
+            @foreach (var ability in Model.Abilities)
+            {
+                <partial name="_AbilityDeleteButton" model=@(ability)/>
+            }
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#search-skill-input").keyup(function() {
+                let searchValue = $(this).val();
+
+                if (searchValue.length < 3) {
+                    $(".skill-view-container").html("");
+
+                    return;
+                }
+
+                $.ajax({
+                    url: "Skills?handler=SkillsStartWith",
+                    method: "GET",
+                    data: { str: searchValue },
+                    success: function(data) {
+                        let skills = "";
+
+                        for (let skill of data)
+                            skills += `<button id="skill-view-btn-${skill.skillId}" class="btn btn-outline-secondary skill-view-btn d-flex align-items-center rounded-3 me-2 mb-2">${skill.title}</button>`
+
+                        $(".skill-view-container").html(skills);
+
+                    },
+                    error: function(error) {
+                        log.error(error);
+                    }
+                });
+            });
+
+
+            $(document).on("click", ".skill-view-btn", function() {
+                let viewButton = $(this);
+                let skillId = $(this).attr("id").split("-").pop();
+
+                $.ajax({
+                    url: "Skills?handler=AddSkill",
+                    method: "POST",
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("XSRF-TOKEN", $('input:hidden[name="__RequestVerificationToken"]').val());
+                    },
+                    data: { skillId: skillId },
+                    success: function (data) {
+                        $(".ability-delete-container").append(data);
+                        viewButton.remove();
+                    },
+                    error: function (error) {
+                        log.error(error);
+                    }
+
+                });
+            });
+
+            $(document).on("click", ".ability-delete-btn", function() {
+                let deleteButton = $(this);
+                let abilityId = $(this).attr("id").split("-").pop();
+
+                $.ajax({
+                    url: "Skills?handler=DeleteAbility",
+                    method: "POST",
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("XSRF-TOKEN", $('input:hidden[name="__RequestVerificationToken"]').val());
+                    },
+                    data: { abilityId: abilityId },
+                    success: function (data) {
+                        deleteButton.remove();
+                    },
+                    error: function (error) {
+                        log.error(error);
+                    }
+
+                });
+            });
+        });
+
+    </script>
+}

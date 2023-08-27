@@ -1,0 +1,112 @@
+﻿@model Career.Models.FormModels.ExperiencesFormModel
+@{
+
+}
+
+<form class="experience-form" id="experience-form-@(Model.Experience.ExperienceId)" method="post">
+    <input type="hidden" asp-for="Experience.ExperienceId" />
+    <input type="hidden" asp-for="Experience.UserId" />
+    <div class="row">
+        <div class="d-flex col-12 col-lg-3 align-items-center justify-content-center">
+            <svg class="bi bi-briefcase" width="128" height="128"><use xlink:href="#experience-icon" /></svg>
+        </div>
+        <div class="col-12 col-lg-9">
+            <div class="d-flex">
+                <!-- Profession Form -->
+                <div class="form-floating d-flex flex-grow-1 disabledEntry">
+                    <input asp-for="Experience.Profession" class="form-control disabled-input disableOnReadOnly" aria-required="true" placeholder="Profession: " disabled/>
+                    <label asp-for="Experience.Profession" class="form-label">Profession:</label>
+                    <span asp-validation-for="Experience.Profession" class="text-danger"></span>
+                </div>
+
+                <!-- Edit Button -->
+                <button class="btn p-0 m-0 edit-experience-btn" type="button" style="width: 32px; height: 32px; opacity: 0.8;" hidden>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square m-0" viewBox="0 0 16 16">
+                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                        <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+                    </svg>
+                </button>
+            </div>
+
+            <div class="row">
+                <!-- Company Name Form -->
+                <div class="col-lg-4">
+                    <div class="form-floating disabledEntry">
+                        <input asp-for="Experience.CompanyName" class="form-control disabled-input disableOnReadOnly" aria-required="true" placeholder="Company Name: " disabled />
+                        <label asp-for="Experience.CompanyName" class="form-label">Company Name: </label>
+                        <span asp-validation-for="Experience.CompanyName" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <!-- Sector Form -->
+                <div class="col-lg-4">
+                    <div class="form-floating disabledEntry">
+                        <select class="form-select disabled-input disableOnReadOnly" asp-for="Experience.SectorId" asp-items="Model.SectorDataset" disabled>
+                            <option value="">--</option>
+                        </select>
+                        <label for="Experience.SectorId">Sector</label>
+                    </div>
+                </div>
+
+                <!-- Industry Form -->
+                <div class="col-lg-4">
+                    <div class="form-floating disabledEntry">
+                        <select class="form-select disabled-input disableOnReadOnly" asp-for="Experience.IndustryId" asp-items="Model.IndustriesDataset" disabled>
+                            <option value="">--</option>
+                        </select>
+                        <label for="Experience.IndustryId">Industry</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Work Type Form -->
+                <div class="col-lg-4">
+                    <div class="form-floating disabledEntry">
+                        <select class="form-select disabled-input disableOnReadOnly" asp-for="Experience.WorkType" asp-items="Model.WorkType" disabled>
+                            <option value="">--</option>
+                        </select>
+                        <label for="Experience.WorkType">Work Type</label>
+                    </div>
+                </div>
+
+                <!-- Start Date Form -->
+                <div class="col-lg-4">
+                    <div class="form-floating disabledEntry">
+                        <input asp-for="Experience.StartDate" class="form-control disabled-input disableOnReadOnly" aria-required="true" placeholder="Start Date: " disabled />
+                        <label asp-for="Experience.StartDate" class="form-label">Start Date:</label>
+                        <span asp-validation-for="Experience.StartDate" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <!-- End Date Form -->
+                <div class="col-lg-4">
+                    <div class="form-floating disabledEntry">
+                        <input asp-for="Experience.EndDate" class="form-control disabled-input disableOnReadOnly" aria-required="true" placeholder="End Date: " disabled />
+                        <label asp-for="Experience.EndDate" class="form-label">End Date:</label>
+                        <span asp-validation-for="Experience.EndDate" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="form-group">
+            <textarea class="form-control disabled-input disableOnReadOnly" asp-for="Experience.JobDefinition" placeholder="Job Definition:" rows="5" disabled></textarea>
+        </div>
+    </div>
+    
+    <div class="row justify-content-between my-1 g-2 hideOnReadOnly" hidden>
+        <div class="col-12 col-lg-6">
+            <button type="button" class="col-12 col-lg-4 btn btn-danger experience-deletion-btn">Delete</button>
+        </div>
+        <div class="col-12 col-lg-6 d-flex justify-content-end flex-wrap">
+            <button type="button" class="col-12 col-lg-4 btn btn-danger experience-cancellation-btn me-0 me-lg-2 mb-2 mb-lg-0">Cancel</button>
+            <button type="submit" class="col-12 col-lg-4 btn btn-success experience-save-btn">Save</button>
+        </div>
+
+    </div>
+
+</form>
+

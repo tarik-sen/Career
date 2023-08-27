@@ -1,0 +1,129 @@
+﻿@page
+@model Career.Areas.Profile.Pages.CV.Manage.EducationsModel
+@{
+    ViewData["Title"] = "Educations";
+    ViewData["ActivePage"] = ProfileSidebarPages.Educations;
+    ViewData["isReadonly"] = false;
+}
+
+<partial name="_EducationListForm" model="Model"/>
+
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $(".select2").select2();
+
+            $(document).on("mouseenter", ".education-container", function () {
+                if ($(this).find("[disabled]").length > 0)
+                    $(this).find(".edit-education-btn").removeAttr("hidden");
+            });
+
+            $(document).on("mouseleave", ".education-container", function () {
+                $(this).find(".edit-education-btn").attr("hidden", "hidden");
+            });
+
+            $(document).on("click", ".edit-education-btn", function() {
+                var $educationContainer = $(this).closest(".education-container");
+                var $disabled = $educationContainer.find(".disableOnReadOnly");
+                var $hidden = $educationContainer.find(".hideOnReadOnly");
+
+                $hidden.removeAttr("hidden");
+                $(this).attr("hidden", "hidden");
+
+                $disabled.removeAttr("disabled");
+                $disabled.removeClass("disabled-entry");
+                $disabled.addClass("active-entry");
+            });
+
+            $(document).on("submit", ".education-form", function(e) {
+                e.preventDefault();
+
+                var $educationContainer = $(this).closest(".education-container");
+                var prevEducationId = $educationContainer.attr("id").split("-").pop();
+
+                $.ajax({
+                    url: "Educations",
+                    method: "POST",
+                    data: $(this).serialize(),
+                    success: function(data) {
+                        var $data = $(data);
+                        var curEducationId = $data.attr("id").split("-").pop();
+
+                        $educationContainer.html(data);
+
+                        if (prevEducationId !== curEducationId)
+                            $educationContainer.attr("id", "education-form-" + curEducationId);
+
+                        if ($data.find(".field-validation-error").length > 0)
+                            $educationContainer.find(".edit-education-btn").click();
+                    }, 
+                    error: function(error) {
+                        console.error(error);
+                    }
+                });
+            });
+
+            $(document).on("click", ".education-deletion-btn", function() {
+                var $educationContainer = $(this).closest(".education-container");
+
+                if ($educationContainer.attr("id") === "education-form-0") {
+                    $educationContainer.remove();
+                    return;
+                }
+
+                $.ajax({
+                    url: "Educations?handler=DeleteEducation",
+                    method: "POST",
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("XSRF-TOKEN", $('input:hidden[name="__RequestVerificationToken"]').val());
+                    },
+                    data: { educationId: $educationContainer.attr("id").split("-").pop() },
+                    success: function() {
+                        $educationContainer.remove();
+                    },
+                    error: function(data) {
+                        console.error(error);
+                    }
+                });
+            });
+
+            $(document).on("click", ".education-cancellation-btn", function() {
+                var $educationContainer = $(this).closest(".education-container");
+
+                if ($educationContainer.attr("id") === "education-form-0") {
+                    $educationContainer.remove();
+                    return;
+                }
+
+                $.ajax({
+                    url: "Educations?handler=EducationWithId",
+                    method: "GET",
+                    data: { educationId: $educationContainer.attr("id").split("-").pop() },
+                    success: function(data) {
+                        $educationContainer.html(data);
+                    },
+                    error: function(error) {
+                        console.error(error);
+                    }
+                });
+            });
+
+            $("#new-education-btn").click(function() {
+                $(".education-cancellation-btn:not([hidden])").click();
+
+                $.ajax({
+                    url: "Educations?handler=NewEducation",
+                    method: "GET",
+                    success: function(data) {
+                        $("#educations").prepend(`<div id="education-form-0" class="education-container p-3 mb-3 border rounded-3">${data}</div>`);
+                        $("#education-form-0").find(".edit-education-btn").click();
+                    },
+                    error: function(error) {
+                        console.error(error);
+                    }
+                });
+            });
+        });
+
+    </script>
+}

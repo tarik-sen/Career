@@ -1,0 +1,119 @@
+﻿@using Career.Authorization
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@model Career.Models.EntityModels.JobsEntityModel
+@{
+    ViewData["Title"] = "Job Details";
+
+    var user = await UserManager.GetUserAsync(User);
+}
+
+<div id="job-container-@(Model.JobId)" class="container job-container d-flex flex-column flex-grow-1 my-3 px-4 py-3 border border-2 rounded-3 bg-white">
+    @if(!SignInManager.IsSignedIn(User))
+    {
+        <partial name="_StatusMsg" , model=@(new StatusMsgFormModel() { Status = "warning", Message = "You must log in to apply!" }) />
+    }
+
+    <div class="job-application-container mb-3">
+        <div class="d-flex justify-content-between">
+            <div class="job-application-title">
+                <h3>@Model.Title</h3>
+                <span class="mb-1">@Model.CompanyName</span>
+            </div>
+            @if (user != null)
+            {
+                <button id="job-apply-btn" class="btn btn-primary-dark rounded-1 m-3" type="button">Apply</button>
+            }
+        </div>
+        <span>@(Model.Address + " " + Model.UserCountry!.Title + " / " + Model.UserCity!.Title)</span>
+    </div>
+
+    <div class="job-summary-container rounded-3 career-secondary-dark p-3 mb-3">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-3 mb-3">
+            <div class="col">
+                <div class="d-flex flex-column rounded-3 ps-3 py-1 career-secondary">
+                    <h5>Job Type</h5>
+                    <span>@Model.WorkType</span>
+                </div>
+            </div>
+            <div class="col">
+                <div class="d-flex flex-column rounded-3 ps-3 py-1 career-secondary">
+                    <h5>Position</h5>
+                    <span>@Model.Position</span>
+                </div>
+            </div>
+            <div class="col">
+                <div class="d-flex flex-column rounded-3 ps-3 py-1 career-secondary">
+                    <h5>Sector</h5>
+                    <span>@Model.UserSector!.Title</span>
+                </div>
+            </div>
+            <div class="col">
+                <div class="d-flex flex-column rounded-3 ps-3 py-1 career-secondary">
+                    <h5>Industry</h5>
+                    <span>@Model.UserIndustry!.Title</span>
+                </div>
+            </div>
+        </div>
+
+        <h5>Job Summary</h5>
+        <span class="">@Model.Summary</span>
+        <br /><br />
+        <span>Total number of applications: <span id="applicant-number"></span></span>
+    </div>
+
+    <div class="job-description-container">
+        <h4>Job Description: </h4>
+        <p>@Model.Description</p>
+    </div>
+    <div class="job-letter-container d-flex flex-column flex-grow-1">
+        <div class="form-group d-flex flex-column flex-grow-1">
+            <textarea id="cover-letter" name="CoverLetter" class="form-control d-flex flex-column flex-grow-1" placeholder="Write a cover letter:"></textarea>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script type="text/javascript">
+        function SetApplicantNumber() {
+            $.ajax({
+                url: "/Jobs/NumberOfApplicants",
+                method: "GET",
+                data: { jobId: $(".job-container").attr("id").split("-").pop() },
+                success: function (data) {
+                    $("#applicant-number").text(data.count);
+                },
+                error: function (error) {
+                    console.error(error);
+                }
+            });
+        }
+
+        $(document).ready(function() {
+            $("#job-apply-btn").click(function() {
+                $.ajax({
+                    url: "/Jobs/Details",
+                    method: "POST",
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("XSRF-TOKEN", $('input:hidden[name="__RequestVerificationToken"]').val());
+                    },
+                    data: { 
+                        jobId: $(".job-container").attr("id").split("-").pop(),
+                        coverLetter: $("#cover-letter").val()
+                    },
+                    success: function(data) {
+                        $(".job-container").prepend(data);
+                        SetApplicantNumber();
+                    },
+                    error: function(error) {
+                        console.error(error);
+                    }
+                });
+            });
+
+            SetApplicantNumber();
+        });
+    </script>
+}

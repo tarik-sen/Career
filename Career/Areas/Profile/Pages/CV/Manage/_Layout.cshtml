@@ -1,0 +1,28 @@
+﻿@{
+    Layout = "/Views/Shared/_Layout.cshtml";
+}
+
+<partial name="_ProfileSidebar"/>
+
+<div class="d-flex flex-column flex-grow-1">
+    <div class="colored-top-box">
+        <p class="ps-3">Details of your CV - @ViewData["Title"]</p>
+    </div>
+    <div class="row gy-3 d-flex flex-column flex-grow-1 p-3 colored-main-box" >
+        @RenderBody()
+    </div>
+
+</div>
+
+@section Scripts {
+    @RenderSection("Scripts", required: false)
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var isCollapsed = false;
+            $("#sidebar-collapse").click(function () {
+                $(".sidebar-collapsible").toggle();
+            });
+        });
+    </script>
+}

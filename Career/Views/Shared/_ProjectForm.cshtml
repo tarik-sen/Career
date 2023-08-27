@@ -1,0 +1,60 @@
+﻿@model Career.Models.EntityModels.UserProjectEntityModel
+@{
+
+}
+
+<form id="project-form-@(Model.ProjectId)" class="project-form" method="post">
+    <input type="hidden" asp-for="ProjectId" />
+    <input type="hidden" asp-for="UserId" />
+    <div class="row d-flex justify-content-between">
+        <!-- Name Form -->
+        <div class="col-10 col-lg-8">
+            <div class="form-floating">
+                <input asp-for="Name" class="form-control disabled-input disableOnReadOnly" aria-required="true" placeholder="Name: " disabled />
+                <label asp-for="Name" class="form-label">Name</label>
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+        </div>
+
+        <!-- Edit Button -->
+        <button class="btn p-0 m-0 col-2 col-lg-4 edit-project-btn" type="button" style="width: 32px; height: 32px; opacity: 0.8;" hidden>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square m-0" viewBox="0 0 16 16">
+                <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+            </svg>
+        </button>
+    </div>
+    
+    <div class="row">
+        <!-- Description Form -->
+        <div class="col-12 col-lg-8 form-group">
+            <textarea class="form-control disabled-input disableOnReadOnly" asp-for="Description" placeholder="Project Details:" rows="5" disabled></textarea>
+        </div>
+        <div class="col-12 col-lg-4">
+            <!-- Date Form -->
+            <div class="form-floating">
+                <input asp-for="Date" class="form-control disabled-input disableOnReadOnly" aria-required="true" placeholder="Date: " disabled />
+                <label asp-for="Date" class="form-label">Date:</label>
+                <span asp-validation-for="Date" class="text-danger"></span>
+            </div>
+
+            <!-- URL Form -->
+            <div class="form-floating">
+                <input asp-for="Url" class="form-control disabled-input disableOnReadOnly" aria-required="true" placeholder="Project Url: " disabled />
+                <label asp-for="Url" class="form-label">Project Url</label>
+                <span asp-validation-for="Url" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row justify-content-between my-1 g-2 hideOnReadOnly" hidden>
+        <div class="col-12 col-lg-6">
+            <button type="button" class="col-12 col-lg-4 btn btn-danger project-deletion-btn">Delete</button>
+        </div>
+        <div class="col-12 col-lg-6 d-flex justify-content-end flex-wrap">
+            <button type="button" class="col-12 col-lg-4 btn btn-danger project-cancellation-btn me-0 me-lg-2 mb-2 mb-lg-0">Cancel</button>
+            <button type="submit" class="col-12 col-lg-4 btn btn-success project-save-btn">Save</button>
+        </div>
+
+    </div>
+</form>

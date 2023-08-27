@@ -1,0 +1,65 @@
+﻿@model Career.Models.EntityModels.JobsEntityModel
+@{
+}
+
+<div id="job-container-@(Model.JobId)" class="container job-container d-flex flex-column flex-grow-1 my-3 px-4 py-3 border border-2 rounded-3 bg-white">
+    <div class="job-application-container mb-3">
+        <div class="d-flex justify-content-between">
+            <div class="job-application-title">
+                <h3>@Model.Title</h3>
+                <span class="mb-1">@Model.CompanyName</span>
+            </div>
+            @if (ViewData["ActivePage"]?.ToString() == "Details")
+            {
+                <a class="btn btn-primary-dark rounded-1 m-3" asp-area="Admin" asp-page="/Jobs/Manage/Update" asp-route-id="@Model.JobId">Update</a>
+            }
+            else if (ViewData["ActivePage"]?.ToString() == "Delete")
+            {
+                <form method="post">
+                    <input type="hidden" name="id" value="@Model.JobId" />
+                    <button type="submit" class="btn btn-danger rounded-1 m-3">Delete</button>
+                </form>
+            }
+        </div>
+        <span>@(Model.Address + " " + Model.UserCountry!.Title + " / " + Model.UserCity!.Title)</span>
+    </div>
+
+    <div class="job-summary-container rounded-3 career-secondary-dark p-3 mb-3">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-3 mb-3">
+            <div class="col">
+                <div class="d-flex flex-column rounded-3 ps-3 py-1 career-secondary">
+                    <h5>Job Type</h5>
+                    <span>@Model.WorkType</span>
+                </div>
+            </div>
+            <div class="col">
+                <div class="d-flex flex-column rounded-3 ps-3 py-1 career-secondary">
+                    <h5>Position</h5>
+                    <span>@Model.Position</span>
+                </div>
+            </div>
+            <div class="col">
+                <div class="d-flex flex-column rounded-3 ps-3 py-1 career-secondary">
+                    <h5>Sector</h5>
+                    <span>@Model.UserSector!.Title</span>
+                </div>
+            </div>
+            <div class="col">
+                <div class="d-flex flex-column rounded-3 ps-3 py-1 career-secondary">
+                    <h5>Industry</h5>
+                    <span>@Model.UserIndustry!.Title</span>
+                </div>
+            </div>
+        </div>
+
+        <h5>Job Summary</h5>
+        <span class="">@Model.Summary</span>
+        <br /><br />
+        <span>Total number of applications: <span id="applicant-number"></span></span>
+    </div>
+
+    <div class="job-description-container">
+        <h4>Job Description: </h4>
+        <p>@Model.Description</p>
+    </div>
+</div>

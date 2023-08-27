@@ -1,0 +1,110 @@
+﻿@model Career.Areas.Profile.Pages.CV.Manage.ContactModel
+@{
+}
+
+<div class="card card-information">
+    <div class="card-header d-flex align-items-center justify-content-between">
+        <span class="card-title-information">Contact Information</span>
+
+        @if (ViewData["Area"]?.ToString() == "Profile" && (bool)ViewData["isReadonly"]!)
+        {
+            <a class="btn btn-page-link border rounded-3" asp-page="./Contact">
+                <svg class="bi bi-pencil-square" style="margin: 0 0.125rem 0.125rem 0;" width="16" height="16"><use xlink:href="#pencil-square" /></svg>
+                Edit
+            </a>
+        }
+
+    </div>
+    <form id="contact-form" method="post">
+        <input type="hidden" asp-for="Contact.UserId" />
+        <div class="card-body row">
+            <div class="col-lg-3 d-flex justify-content-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" fill="currentColor" class="bi bi-person my-0 my-lg-4" viewBox="0 0 16 16">
+                    <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4Zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10Z" />
+                </svg>
+            </div>
+            <div class="col-lg-9 row">
+                <div class="col-lg-6">
+                    <!-- Name Form !!! You can shorten this syntax !!! -->
+                    <div class="form-floating" style="@((bool) ViewData["isReadonly"]! ? "margin-bottom: 0;" : "margin-bottom: 0.75rem;")">
+                        <input asp-for="Contact.Name" class="form-control disabled-input" aria-required="true" placeholder="Name: " disabled="@(ViewData["isReadonly"])" />
+                        <label asp-for="Contact.Name" class="form-label">Name</label>
+                        <span asp-validation-for="Contact.Name" class="text-danger"></span>
+                    </div>
+
+                    <!-- Email Form -->
+                    <div class="form-floating" style="@((bool) ViewData["isReadonly"]! ? "margin-bottom: 0;" : "margin-bottom: 0.75rem;")">
+                        <input asp-for="Contact.Email" class="form-control disabled-input" aria-required="true" placeholder="Email: " disabled="@(ViewData["isReadonly"])" />
+                        <label asp-for="Contact.Email" class="form-label">E-mail</label>
+                        <span asp-validation-for="Contact.Email" class="text-danger"></span>
+                    </div>
+
+                    <!-- Phone Form -->
+                    <div class="form-floating" style="@((bool) ViewData["isReadonly"]! ? "margin-bottom: 0;" : "margin-bottom: 0.75rem;")">
+                        <input asp-for="Contact.Phone" class="form-control disabled-input" aria-required="true" placeholder="Phone: " disabled="@(ViewData["isReadonly"])" />
+                        <label asp-for="Contact.Phone" class="form-label">Phone</label>
+                        <span asp-validation-for="Contact.Phone" class="text-danger"></span>
+                    </div>
+
+                    <!-- Country Form -->
+                    <div class="form-floating" style="@((bool) ViewData["isReadonly"]! ? "margin-bottom: 0;" : "margin-bottom: 0.75rem;")">
+                        <select id="country-select" class="form-select disabled-input" asp-for="Contact.CountryId" asp-items="Model.CountryDataset" disabled="@(ViewData["isReadonly"])">
+                            <option value="">--</option>
+                        </select>
+                        <label for="Contact.CountryId">Country</label>
+                    </div>
+
+                    <!-- City Form -->
+                    <div class="form-floating" style="@((bool) ViewData["isReadonly"]! ? "margin-bottom: 0;" : "margin-bottom: 0.75rem;")">
+                        <select id="city-select" class="form-select disabled-input" asp-for="Contact.CityId" asp-items="Model.CityDataset" disabled="@(ViewData["isReadonly"])">
+                            <option value="">--</option>
+                        </select>
+                        <label for="Contact.CityId">City</label>
+                    </div>
+
+                </div>
+                <div class="col-lg-6">
+                    <!-- Surname Form -->
+                    <div class="form-floating" style="@((bool) ViewData["isReadonly"]! ? "margin-bottom: 0;" : "margin-bottom: 0.75rem;")">
+                        <input asp-for="Contact.Surname" class="form-control disabled-input" aria-required="true" placeholder="Surname: " disabled="@(ViewData["isReadonly"])" />
+                        <label asp-for="Contact.Surname" class="form-label">Surname</label>
+                        <span asp-validation-for="Contact.Surname" class="text-danger"></span>
+                    </div>
+
+                    <!-- Birtday Form -->
+                    <div class="form-floating" style="@((bool) ViewData["isReadonly"]! ? "margin-bottom: 0;" : "margin-bottom: 0.75rem;")">
+                        <input asp-for="Contact.BirthDay" class="form-control disabled-input" aria-required="true" placeholder="Birthday: " disabled="@(ViewData["isReadonly"])" />
+                        <label asp-for="Contact.BirthDay" class="form-label">Birthday</label>
+                        <span asp-validation-for="Contact.BirthDay" class="text-danger"></span>
+                    </div>
+
+                    <!-- Github URL Form -->
+                    <div class="form-floating" style="@((bool) ViewData["isReadonly"]! ? "margin-bottom: 0;" : "margin-bottom: 0.75rem;")">
+                        <input asp-for="Contact.GithubUrl" class="form-control disabled-input" aria-required="true" placeholder="Github: " disabled="@(ViewData["isReadonly"])" />
+                        <label asp-for="Contact.GithubUrl" class="form-label">Github</label>
+                        <span asp-validation-for="Contact.GithubUrl" class="text-danger"></span>
+                    </div>
+
+                    <!-- LinkedIn URL Form -->
+                    <div class="form-floating" style="@((bool) ViewData["isReadonly"]! ? "margin-bottom: 0;" : "margin-bottom: 0.75rem;")">
+                        <input asp-for="Contact.LinkedInUrl" class="form-control disabled-input" aria-required="true" placeholder="LinkedIn: " disabled="@(ViewData["isReadonly"])" />
+                        <label asp-for="Contact.LinkedInUrl" class="form-label">LinkedIn</label>
+                        <span asp-validation-for="Contact.LinkedInUrl" class="text-danger"></span>
+                    </div>
+
+                    <!-- Personal URL Form -->
+                    <div class="form-floating" style="@((bool) ViewData["isReadonly"]! ? "margin-bottom: 0;" : "margin-bottom: 0.75rem;")">
+                        <input asp-for="Contact.PersonalUrl" class="form-control disabled-input" aria-required="true" placeholder="Personal: " disabled="@(ViewData["isReadonly"])" />
+                        <label asp-for="Contact.PersonalUrl" class="form-label">Personal</label>
+                        <span asp-validation-for="Contact.PersonalUrl" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-footer card-footer-information" hidden="@(ViewData["isReadonly"])">
+            <button id="update-contact-data-btn" type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
+        </div>
+
+    </form>
+</div>

@@ -1,0 +1,50 @@
+﻿@page
+@model Career.Areas.Admin.Pages.Jobs.Manage.IndexModel
+@{
+    ViewData["Title"] = "JobManager";
+}
+
+<div id="jobs-explanation-container" class="mt-1 pb-2 mb-2 border-bottom border-1">
+    <p class="display-5 text-center">Welcome to Job Management</p>
+    <p class="lead fs-5">Explore our intuitive job management system that empowers you to effortlessly create, update, and delete job listings.</p>
+    <p>
+        <a class="btn btn-filter d-flex justify-content-center rounded-3" asp-area="Admin" asp-page="/Jobs/Manage/Create">Create a New Job</a>
+    </p>
+</div>
+
+<div id="job-container" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 row-cols-xxl-5 g-4 mb-2">
+    @if (Model.Jobs == null)
+    {
+        <p>Could not found any job, add some!</p>
+    }
+    else
+    {
+        @foreach (var job in Model.Jobs)
+        {
+            <div class="col solution_cards_box">
+                <div class="solution_card d-flex flex-column h-100">
+                    <div class="hover_color_bubble"></div>
+                    <div class="solu_title">
+                        <h3>@job.Title</h3>
+                    </div>
+                    <div class="solu_title">
+                        <h6>@job.CompanyName</h6>
+                    </div>
+                    <div class="solu_description flex-grow-1">
+                        <p>@(job.Description.Length <= 128 ? job.Description : job.Description.Substring(0, 128) + "...")</p>
+                    </div>
+                    <div class="solu_description d-flex align-items-center justify-content-between">
+                        <a asp-area="Admin" asp-page="/Jobs/Manage/Delete" asp-route-id="@job.JobId" class="btn trash-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z" />
+                                <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z" />
+                            </svg>
+                        </a>
+                        <a asp-area="Admin" asp-page="/Jobs/Manage/Details" asp-route-id="@job.JobId" class="btn read_more_btn">Details</a>
+                    </div>
+                </div>
+
+            </div>
+        }
+    }
+</div>

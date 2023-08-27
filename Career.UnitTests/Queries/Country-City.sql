@@ -1,0 +1,1 @@
+﻿SELECT Country.Title, City.Title FROM dbo.CountryDataset AS Country LEFT JOIN dbo.CityDataset AS City ON Country.CountryId = City.CountryId ORDER BY Country.Title, City.Title;

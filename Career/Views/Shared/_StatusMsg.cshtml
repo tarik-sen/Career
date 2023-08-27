@@ -1,0 +1,9 @@
+﻿@model Career.Models.FormModels.StatusMsgFormModel
+
+@if (!String.IsNullOrEmpty(Model.Status))
+{
+    <div class="alert alert-@Model.Status alert-dismissible" role="alert">
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        @Model.Message
+    </div>
+}

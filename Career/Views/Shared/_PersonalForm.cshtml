@@ -1,0 +1,108 @@
+﻿@model Career.Areas.Profile.Pages.CV.Manage.PersonalModel
+@{
+    string curStyle = (bool)ViewData["isReadonly"]! ?
+                @"margin: 0;
+                  border: none !important;" 
+                :
+                @"margin: 0.75rem 0 0.75rem 0;";
+}
+
+
+<div class="card card-information">
+    <div class="card-header d-flex align-items-center justify-content-between">
+        <span class="card-title-information">Personal Information</span>
+
+        @if (ViewData["Area"]?.ToString() == "Profile" && (bool)ViewData["isReadonly"]!)
+        {
+            <a class="btn btn-page-link border rounded-3" asp-page="./Personal">
+                <svg class="bi bi-pencil-square" style="margin: 0 0.125rem 0.125rem 0;" width="16" height="16"><use xlink:href="#pencil-square" /></svg>
+                Edit
+            </a>
+        }
+    </div>
+    <form id="personal-form" method="post">
+        <input type="hidden" asp-for="Personal.UserId" />
+        <div class="card-body row">
+            <div class="col-lg-6">
+                <!-- Nationality Form -->
+                <div class="form-floating">
+                    <select id="nationality-select" class="form-select disabled-input" asp-for="Personal.NationalityId" asp-items="Model.NationalityDataset" disabled="@(ViewData["isReadonly"])">
+                        <option value="">--</option>
+                    </select>
+                    <label for="Personal.NationalityId">Nationality</label>
+                </div>
+
+                <!-- Gender Form -->
+                <div class="d-flex p-3 border rounded-2" style="@curStyle">
+                    <span class="col-6 d-flex align-items-center">Gender: </span>
+                    <div class="col-6">
+                        @foreach (var option in Model.GenderOptions)
+                        {
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" asp-for="Personal.Gender" value="@option.Value" id="@option.Value" checked="@(option.Selected)" disabled="@(ViewData["isReadonly"])" >
+                                <label class="form-check-label" asp-for="Personal.Gender">@option.Text</label>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <!-- Military Services Form -->
+                <div class="d-flex p-3 border rounded-2" style="@curStyle">
+                    <span class="col-6 d-flex align-items-center">Military: </span>
+                    <div class="col-6">
+                        @foreach (var option in Model.MilitaryServicesOptions)
+                        {
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" asp-for="Personal.MilitaryServices" value="@option.Value" id="@option.Value" checked="@(option.Selected)" disabled="@(ViewData["isReadonly"])">
+                                <label class="form-check-label" asp-for="Personal.MilitaryServices">@option.Text</label>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="col-lg-6">
+                <!-- Expected Salary -->
+                <div class="form-floating">
+                    <input asp-for="Personal.ExpectedSalary" class="form-control disabled-input" placeholder="Expected Salary: " disabled="@(ViewData["isReadonly"])" />
+                    <label asp-for="Personal.ExpectedSalary" class="form-label">Expected Salary</label>
+                    <span asp-validation-for="Personal.ExpectedSalary" class="text-danger"></span>
+                </div>
+
+                <!-- Retired Form -->
+                <div class="d-flex p-3 border rounded-2" style="@curStyle">
+                    <span class="col-6 d-flex align-items-center">Retired: </span>
+                    <div class="col-6">
+                        @foreach (var option in Model.RetiredOptions)
+                        {
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" asp-for="Personal.Retired" value="@option.Value" id="@option.Value" checked="@(option.Selected)" disabled="@(ViewData["isReadonly"])">
+                                <label class="form-check-label" asp-for="Personal.Retired">@option.Text</label>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <!-- Handicap Form -->
+                <div class="d-flex p-3 border rounded-2" style="@curStyle">
+                    <span class="col-6 d-flex align-items-center">Handicap: </span>
+                    <div class="col-6">
+                        @foreach (var option in Model.HandicapOptions)
+                        {
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" asp-for="Personal.Handicap" value="@option.Value" id="@option.Value" checked="@(option.Selected)" disabled="@(ViewData["isReadonly"])">
+                                <label class="form-check-label" asp-for="Personal.Handicap">@option.Text</label>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="card-footer card-footer-information" hidden="@(ViewData["isReadonly"])">
+            <button id="update-personal-data-btn" type="submit" class="btn btn-primary btn-lg w-100">Save</button>
+        </div>
+    </form>
+</div>

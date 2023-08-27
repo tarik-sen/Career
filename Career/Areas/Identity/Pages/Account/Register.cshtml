@@ -1,0 +1,50 @@
+﻿@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+
+<div class="container">
+    <div class="row d-flex flex-wrap justify-content-center my-5">
+        <div class="col-12 col-lg-6 mb-5 mb-lg-0 d-flex flex-column align-content-center justify-content-center">
+            <h1 class="text-center">
+                Your <strong>Career</strong>, Your Way: 
+                <br/>Register Today!
+            </h1>
+            <div class="d-flex justify-content-center mb-0 mb-xxl-5">
+                <object data="~/logo/logo-lg-black.svg" type="image/svg+xml" class="img-fluid" style="width: 320px; height: 320px; fill: currentColor;"></object>
+            </div>
+            <h2 class="slogan text-center">Personalize your career path. <br />Register now and take charge of your professional journey.</h2>
+        </div>
+        <div class="col-12 col-lg-6 d-flex flex-column justify-content-start">
+            <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                <h1>Create a new account.</h1>
+                <p class="slogan-light">Create your account and take the first step to find your ideal job.</p>
+                <hr />
+                <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+                    <label asp-for="Input.Email">Email</label>
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                </div>
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
+                    <label asp-for="Input.Password">Password</label>
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                </div>
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
+                    <label asp-for="Input.ConfirmPassword">Confirm Password</label>
+                    <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                </div>
+                <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
