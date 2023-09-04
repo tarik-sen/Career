@@ -27,6 +27,8 @@ Clone the repository and open it via Visual Studio
 git clone https://github.com/tarik-sen/Career.git
 ```
 
+> ⚠️ If dotnet-ef is not installed, run "dotnet tool install --global dotnet-ef".
+
 Create a terminal and run these commands (change the <pw> with a proper - strong - password) to create the database and set user & admin account passwords.
 ```bash
 dotnet ef database update
