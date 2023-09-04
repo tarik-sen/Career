@@ -4,26 +4,45 @@ It is written only for educational purposes and not suitable for any kind of org
 
 > ⚠️ Current version supports only one Company account!
 
-### Features for recruiters
+## Features for recruiters
 - Create, Review, Update and Delete Job Posts
 - Visualization of candidate data with charts.
 - Notification system for job recruitment
 - Various ordering options during candidate selection.
 - View candidate resumes.
 
-### Features for job seekers
+## Features for job seekers
 - Build your detailed CV with a vast amount of features from contact info to any kind of skill
 - Filter job posts to suit your needs.
 - Apply a job and get notified when recruiter wants you in.
 - Account managment
 
-### Contributing
+## Requirements
+  - Visual Studio with C# & asp.net core
+  - Microsoft SQL Server
+
+## Installation
+Clone the repository and open it via Visual Studio
+```bash
+git clone https://github.com/tarik-sen/Career.git
+```
+
+Create a terminal and run these commands (change the <pw> with a proper - strong - password) to create the database and set user & admin account passwords.
+```bash
+dotnet ef database update
+dotnet user-secrets set UserPW <PW>
+dotnet user-secrets set AdminPW <PW>
+```
+
+That's all, run the application and enjoy your time!
+
+## Contributing
 Contributions are welcome! If you find a bug or have an enhancement in mind, feel free to open an issue or submit a pull request.
 
-### License
+## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-### Sample Images
+## Sample Images
 <img src=docs/images/demo-1.png>
 <p align="center"><em>Screenshot</em>: A preview of the Career platform's home page.</p>
 <br/>
