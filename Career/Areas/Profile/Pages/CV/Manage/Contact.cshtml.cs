@@ -7,7 +7,7 @@ using Career.Models.Datasets;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Career.Models.FormModels;
-using Career.Debug;
+using Career.DebugHelper;
 
 namespace Career.Areas.Profile.Pages.CV.Manage;
 

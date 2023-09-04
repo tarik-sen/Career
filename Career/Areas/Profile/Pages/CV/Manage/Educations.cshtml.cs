@@ -1,5 +1,5 @@
 using Career.Data;
-using Career.Debug;
+using Career.DebugHelper;
 using Career.Models;
 using Career.Models.EntityModels;
 using Career.Models.FormModels;
